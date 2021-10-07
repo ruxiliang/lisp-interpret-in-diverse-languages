@@ -1,10 +1,7 @@
 import org.antlr.v4.runtime.*
+import java.io.FileInputStream
 
 
-fun main() {
-	val input = CharStreams.fromString("hello senpai")
-	val lexer = GrammarLexer(input)
-	val parser = GrammarParser(CommonTokenStream(lexer))
-	println(parser.tokenStream)
-	println(parser.r().toStringTree())
+fun main(args: Array<String>) {
+
 }

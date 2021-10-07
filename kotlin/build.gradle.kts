@@ -14,6 +14,7 @@ repositories {
 dependencies {
     implementation("org.antlr:antlr4-master:4.9.2")
 	implementation("org.antlr:antlr4-runtime:4.9.2")
+	implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
 	testImplementation(kotlin("test"))
 }
 

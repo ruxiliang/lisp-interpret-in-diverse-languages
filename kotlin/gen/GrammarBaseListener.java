@@ -1,4 +1,4 @@
-// Generated from C:/Users/OkitaSan/codebase/lisp-interpret-in-diverse-languages/kotlin\Grammar.g4 by ANTLR 4.9.1
+// Generated from C:/Users/OkitaSan/codebase/lisp-interpret-in-diverse-languages/kotlin/grammar\Lisp.g4 by ANTLR 4.9.1
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -15,13 +15,37 @@ public class GrammarBaseListener implements GrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterR(GrammarParser.RContext ctx) { }
+	@Override public void enterProg(GrammarParser.ProgContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitR(GrammarParser.RContext ctx) { }
+	@Override public void exitProg(GrammarParser.ProgContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStat(GrammarParser.StatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStat(GrammarParser.StatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterExpr(GrammarParser.ExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExpr(GrammarParser.ExprContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

@@ -1,4 +1,4 @@
-// Generated from C:/Users/OkitaSan/codebase/lisp-interpret-in-diverse-languages/kotlin\Grammar.g4 by ANTLR 4.9.1
+// Generated from C:/Users/OkitaSan/codebase/lisp-interpret-in-diverse-languages/kotlin/grammar\Lisp.g4 by ANTLR 4.9.1
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
@@ -16,5 +16,19 @@ public class GrammarBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitR(GrammarParser.RContext ctx) { return visitChildren(ctx); }
+	@Override public T visitProg(GrammarParser.ProgContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitStat(GrammarParser.StatContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitExpr(GrammarParser.ExprContext ctx) { return visitChildren(ctx); }
 }

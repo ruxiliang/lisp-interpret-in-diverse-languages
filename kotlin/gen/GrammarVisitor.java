@@ -1,4 +1,4 @@
-// Generated from C:/Users/OkitaSan/codebase/lisp-interpret-in-diverse-languages/kotlin\Grammar.g4 by ANTLR 4.9.1
+// Generated from C:/Users/OkitaSan/codebase/lisp-interpret-in-diverse-languages/kotlin/grammar\Lisp.g4 by ANTLR 4.9.1
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -10,9 +10,21 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface GrammarVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link GrammarParser#r}.
+	 * Visit a parse tree produced by {@link GrammarParser#prog}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitR(GrammarParser.RContext ctx);
+	T visitProg(GrammarParser.ProgContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GrammarParser#stat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStat(GrammarParser.StatContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpr(GrammarParser.ExprContext ctx);
 }

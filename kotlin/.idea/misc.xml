@@ -6,12 +6,33 @@
         <PerGrammarGenerationSettings>
           <option name="fileName" value="$PROJECT_DIR$/Grammar.g4" />
           <option name="autoGen" value="true" />
-          <option name="outputDir" value="" />
+          <option name="outputDir" value="C:\Users\OkitaSan\codebase\lisp-interpret-in-diverse-languages\kotlin\src\main\java" />
           <option name="libDir" value="" />
           <option name="encoding" value="" />
           <option name="pkg" value="" />
           <option name="language" value="" />
           <option name="generateListener" value="false" />
+          <option name="generateVisitor" value="true" />
+        </PerGrammarGenerationSettings>
+        <PerGrammarGenerationSettings>
+          <option name="fileName" value="$PROJECT_DIR$/grammar/Grammar.g4" />
+          <option name="autoGen" value="true" />
+          <option name="outputDir" value="C:\Users\OkitaSan\codebase\lisp-interpret-in-diverse-languages\kotlin\src\main\java" />
+          <option name="libDir" value="C:\Users\OkitaSan\codebase\lisp-interpret-in-diverse-languages\kotlin\grammar" />
+          <option name="encoding" value="" />
+          <option name="pkg" value="" />
+          <option name="language" value="" />
+          <option name="generateListener" value="false" />
+          <option name="generateVisitor" value="true" />
+        </PerGrammarGenerationSettings>
+        <PerGrammarGenerationSettings>
+          <option name="fileName" value="$PROJECT_DIR$/grammar/Lisp.g4" />
+          <option name="autoGen" value="true" />
+          <option name="outputDir" value="C:\Users\OkitaSan\codebase\lisp-interpret-in-diverse-languages\kotlin\src\main\java" />
+          <option name="libDir" value="" />
+          <option name="encoding" value="" />
+          <option name="pkg" value="" />
+          <option name="language" value="" />
           <option name="generateVisitor" value="true" />
         </PerGrammarGenerationSettings>
       </list>

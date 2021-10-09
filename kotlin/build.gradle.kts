@@ -15,6 +15,7 @@ dependencies {
     implementation("org.antlr:antlr4-master:4.9.2")
 	implementation("org.antlr:antlr4-runtime:4.9.2")
 	implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
+	implementation("org.junit.jupiter:junit-jupiter:5.7.0")
 	testImplementation(kotlin("test"))
 }
 

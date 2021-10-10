@@ -4,8 +4,15 @@ import org.ruxi.scheme.environment.SchemeFrame
 import org.ruxi.scheme.types.*
 import java.io.FileInputStream
 
+data class Foo(var dict:MutableMap<String,Int> = mutableMapOf())
 
 fun main(args: Array<String>) {
+	val test = Foo()
+	val procTest = {
+		println(test.dict["age"])
+	}
+	test.dict["age"] = 24
+	procTest()
 	val lambdaExpr = SchemeLambdaProcedure(
 		SchemeSymbol("add-then-mul"),
 		listOf(SchemeSymbol("lhs"), SchemeSymbol("rhs")),

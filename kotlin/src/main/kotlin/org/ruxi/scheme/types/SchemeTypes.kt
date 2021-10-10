@@ -73,13 +73,13 @@ data class SchemeBuiltinProcedure(val name: String) : SchemeProcedure {
 
 /**
  * scheme的lambda函数类
- * @property name:lambda函数的tag
+ * @property tag:lambda函数的tag
  * @property formalArgs:lambda函数接受的形参，这里事形参名，和eval函数的env的值结合然后扩展当前env
  * @property body:lambda函数的函数体
  * @property env:lambda函数创建时的frame
  */
 data class SchemeLambdaProcedure(
-	val name: SchemeSymbol,
+	val tag: SchemeSymbol,
 	val formalArgs: List<SchemeSymbol>,
 	val body: List<SchemeType>,
 	val env: SchemeFrame
@@ -97,5 +97,5 @@ data class SchemeLambdaProcedure(
 		this.args = args
 		return this
 	}
-	override fun toString(): String = "#[lambda($name)\n]"
+	override fun toString(): String = "#[lambda($tag)\n]"
 }

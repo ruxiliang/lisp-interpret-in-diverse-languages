@@ -4,37 +4,58 @@ import org.ruxi.scheme.environment.SchemeFrame
 import org.ruxi.scheme.types.*
 import java.io.FileInputStream
 
-data class Foo(var dict:MutableMap<String,Int> = mutableMapOf())
+data class Foo(var dict: MutableMap<String, Int> = mutableMapOf())
 
 fun main(args: Array<String>) {
-	val test = Foo()
-	val procTest = {
-		println(test.dict["age"])
-	}
-	test.dict["age"] = 24
-	procTest()
-	val lambdaExpr = SchemeLambdaProcedure(
-		SchemeSymbol("add-then-mul"),
-		listOf(SchemeSymbol("lhs"), SchemeSymbol("rhs")),
-		listOf(
-			SchemeBuiltinProcedure(
-				"+"
-			).argsOf(
-				listOf(
-					SchemeBuiltinProcedure("*").argsOf(
-						listOf(SchemeSymbol("lhs"),
-							   SchemeSymbol("rhs")
+	val initEnv = SchemeFrame(mutableMapOf("two".toSchemeSymbol() to (SchemeInt(2))), SchemeFrame(BuiltinFunctions.builtinFunc,null))
+	val fib =
+		DefineExpr(
+			name = "fib".toSchemeSymbol(),
+			expr = SchemeLambdaProcedure(
+				tag = "whatever".toSchemeSymbol(),
+				formalArgs = listOf("n".toSchemeSymbol()),
+				body = listOf(
+					IfExpr(
+						predicate = CallExpr(
+							func = SchemeSymbol("<"),
+							args = listOf("n".toSchemeSymbol(), SchemeSymbol("two"))
+						),
+						consequent = SchemeSymbol("n"),
+						alternative = CallExpr(
+							func = SchemeSymbol("+"),
+							args = listOf(
+								CallExpr(
+									func = SchemeSymbol("fib"),
+									args = listOf(
+										CallExpr(
+											func = SchemeSymbol("-"),
+											args = listOf(
+												SchemeSymbol("n"),
+												SchemeInt(2)
+											)
+										),
+									)
+								),
+								CallExpr(
+									func = SchemeSymbol("fib"),
+									args = listOf(
+										CallExpr(
+											func = SchemeSymbol("-"),
+											args = listOf(
+												SchemeSymbol("n"),
+												SchemeInt(1)
+											)
+										),
+									)
+								)
+							)
 						)
-					),
-					SchemeSymbol("rhs")
-				)
+					)
+				),
+				env = initEnv
 			)
-		),
-		SchemeFrame(mapOf(), null)
-	)
-	println(
-		lambdaExpr.argsOf(
-			listOf(SchemeInt(20),SchemeInt(30))
-		).eval(SchemeFrame(mapOf(),null))
-	)
+		).eval(initEnv).eval(initEnv) as SchemeLambdaProcedure
+	for (elem in 1..4) {
+		println("$elem:${fib(listOf(elem.toScheme()), initEnv)}")
+	}
 }

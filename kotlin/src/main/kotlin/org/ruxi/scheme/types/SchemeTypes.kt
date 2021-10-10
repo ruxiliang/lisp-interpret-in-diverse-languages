@@ -1,33 +1,38 @@
 package org.ruxi.scheme.types
 
 import org.ruxi.scheme.builtins.BuiltinFunctions
-import org.ruxi.scheme.environment.SchemeException
 import org.ruxi.scheme.environment.SchemeFrame
 import org.ruxi.scheme.environment.extendEnv
 import org.ruxi.scheme.environment.lookUp
 
-sealed interface SchemeType {
-	fun eval(scope: SchemeFrame): SchemeType
-}
+sealed interface SchemeType: SchemeExpr
 
 sealed interface SchemePairType : SchemeType {
 	fun evalPair(scope: SchemeFrame): SchemePairType
 	override fun eval(scope: SchemeFrame): SchemeType = this.evalPair(scope)
 }
 
-sealed interface SchemeProcedure : SchemeType
+sealed interface SchemeProcedure : SchemeType{
+	override fun eval(scope: SchemeFrame): SchemeExpr = this
+	operator fun invoke(args: List<SchemeExpr>, scope: SchemeFrame): SchemeExpr
+}
 
 data class SchemeInt(val intValue: Int) : SchemeType {
 	override fun eval(scope: SchemeFrame): SchemeType = this
 	override fun toString(): String = intValue.toString()
 }
 
+fun SchemeInt.toInt(): Int = this.intValue
+fun Int.toScheme() = SchemeInt(this)
 data class SchemeString(val StringValue: String) : SchemeType {
 	override fun eval(scope: SchemeFrame): SchemeType = this
 	override fun toString(): String {
 		return StringValue
 	}
 }
+
+fun SchemeString.toKtString() = this.StringValue
+fun String.toScheme() = SchemeString(this)
 
 data class SchemeBoolean(val BooleanValue: Boolean) : SchemeType {
 	override fun eval(scope: SchemeFrame): SchemeType = this
@@ -40,17 +45,24 @@ data class SchemeBoolean(val BooleanValue: Boolean) : SchemeType {
 	}
 }
 
-data class SchemeSymbol(val tag: String) : SchemeType {
-	override fun eval(scope: SchemeFrame): SchemeType = scope.lookUp(this) ?: this
+fun SchemeBoolean.toBoolean() = this.BooleanValue
+fun Boolean.toScheme() = SchemeBoolean(this)
+fun String.toSchemeString() = SchemeString(this)
+fun String.toSchemeSymbol() = SchemeSymbol(this)
+
+data class SchemeSymbol(val tag: String) : SchemeExpr {
+	override fun eval(scope: SchemeFrame): SchemeExpr = scope.lookUp(this) ?: this
 	override fun toString(): String = tag
 }
+
+fun SchemeSymbol.toKtString() = this.tag
 
 object Nil : SchemePairType {
 	override fun evalPair(scope: SchemeFrame): SchemePairType = this
 	override fun toString(): String = "()"
 }
 
-data class SchemePair(val car: SchemeType, val cdr: SchemePairType) : SchemePairType {
+data class SchemePair<out T:SchemePairType>(val car: SchemeExpr, val cdr: T) : SchemePairType {
 	override fun evalPair(scope: SchemeFrame): SchemePairType = SchemePair(car.eval(scope), cdr.evalPair(scope))
 	override fun toString(): String = "($car,$cdr)"
 }
@@ -58,17 +70,16 @@ data class SchemePair(val car: SchemeType, val cdr: SchemePairType) : SchemePair
 /**
  * scheme的内建函数类
  * @property name:是内建函数的名字
- * @property args:事实参的函数列表，由于是内建就不加formal args了ww
  */
 data class SchemeBuiltinProcedure(val name: String) : SchemeProcedure {
-	private var args:List<SchemeType>? = null
-	override fun eval(scope: SchemeFrame): SchemeType = BuiltinFunctions(name, *args?.map{it.eval(scope)}?.toTypedArray()
-		?: throw SchemeException("no arguments of internal procedure"))
-	fun argsOf(args:List<SchemeType>):SchemeBuiltinProcedure{
-		this.args = args
-		return this
+	// 修改了func的eval语义，func的eval只会返回自身
+	// 真正调用的话需要先直接传参然后调用invoke方法
+	override operator fun invoke(args: List<SchemeExpr>, scope: SchemeFrame): SchemeExpr{
+		val newArgs = args.map { it.eval(scope) }
+		return BuiltinFunctions(name,*newArgs.toTypedArray())
 	}
-	override fun toString(): String = "#[builtin($name)]\n"
+	operator fun invoke(vararg args:SchemeExpr,scope: SchemeFrame):SchemeExpr = this(args.toList(),scope)
+	override fun toString(): String = "#[builtin($name)]"
 }
 
 /**
@@ -81,21 +92,20 @@ data class SchemeBuiltinProcedure(val name: String) : SchemeProcedure {
 data class SchemeLambdaProcedure(
 	val tag: SchemeSymbol,
 	val formalArgs: List<SchemeSymbol>,
-	val body: List<SchemeType>,
+	val body: List<SchemeExpr>,
 	val env: SchemeFrame
 ) : SchemeProcedure {
-	private var args:List<SchemeType>? = null
-	override fun eval(scope: SchemeFrame): SchemeType {
-		val newEnv = env.extendEnv(formalArgs.zip(args!!.map { it.eval(scope) }).toMap())
-		var res: SchemeType = Nil
-		for (expr in body) {
-			res = expr.eval(newEnv)
+	// 修改了func的eval语义，func的eval只会返回自身
+	// 真正调用的话需要先直接传参然后调用invoke方法
+	override operator fun invoke(args: List<SchemeExpr>, scope: SchemeFrame): SchemeExpr{
+		var res:SchemeExpr = Nil
+		val newArgs = args.map { it.eval(scope) }
+		val callEnv = env.extendEnv(formalArgs.zip(newArgs))
+		for(expr in body){
+			res = expr.eval(callEnv)
 		}
 		return res
 	}
-	fun argsOf(args:List<SchemeType>):SchemeLambdaProcedure{
-		this.args = args
-		return this
-	}
-	override fun toString(): String = "#[lambda($tag)\n]"
+	operator fun invoke(vararg args:SchemeExpr,scope: SchemeFrame):SchemeExpr = this(args.toList(),scope)
+	override fun toString(): String = "#[lambda($tag)]"
 }
